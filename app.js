@@ -9,8 +9,15 @@ app.get("/", (req, res) => {
 });
 
 app.get("/liste", async (req, res) => {
-	const [rows] = await db.execute("SELECT * FROM ouvrages;");
-	res.render("liste", { ouvrages: rows });
+	let sql = "SELECT * FROM ouvrages ";
+	const params = [];
+
+	if (req.query.titre) {
+		sql += "WHERE titre LIKE ?";
+		params.push(`%${req.query.titre}%`);
+	}
+	const [rows] = await db.execute(sql, params);
+	res.render("liste", { ouvrages: rows, query: req.query });
 });
 
 app.listen(3000, () => {
