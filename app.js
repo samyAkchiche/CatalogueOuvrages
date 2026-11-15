@@ -8,16 +8,52 @@ app.get("/", (req, res) => {
 	res.send("Hello");
 });
 
-app.get("/liste", async (req, res) => {
-	let sql = "SELECT * FROM ouvrages ";
-	const params = [];
+function parseAnnee(valeur) {
+	const n = parseInt(valeur, 10);
+	return Number.isInteger(n) ? n : null;
+}
 
-	if (req.query.titre) {
-		sql += "WHERE titre LIKE ?";
-		params.push(`%${req.query.titre}%`);
+app.get("/liste", async (req, res) => {
+	try {
+		const titre = (req.query.titre || "").trim();
+		const auteur = (req.query.auteur || "").trim();
+		const anneeMin = parseAnnee(req.query.anneeMin);
+		const anneeMax = parseAnnee(req.query.anneeMax);
+		let sql = "SELECT * FROM ouvrages WHERE 1=1";
+		const params = [];
+
+		if (titre) {
+			sql += " AND titre LIKE ?";
+			params.push(`%${titre}%`);
+		}
+
+		if (auteur) {
+			sql += " AND auteur LIKE ?";
+			params.push(`%${auteur}%`);
+		}
+
+		if (anneeMin !== null) {
+			sql += " AND annee >= ?";
+			params.push(anneeMin);
+		}
+
+		if (anneeMax !== null) {
+			sql += " AND annee <= ?";
+			params.push(anneeMax);
+		}
+
+		const [rows] = await db.execute(sql, params);
+		res.render("liste", {
+			ouvrages: rows,
+			titre,
+			auteur,
+			anneeMin,
+			anneeMax,
+		});
+	} catch (error) {
+		console.error(error);
+		res.status(500).send("Erreur lors de la récupération des ouvrages.");
 	}
-	const [rows] = await db.execute(sql, params);
-	res.render("liste", { ouvrages: rows, query: req.query });
 });
 
 app.listen(3000, () => {

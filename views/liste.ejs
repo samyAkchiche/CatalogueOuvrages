@@ -8,8 +8,20 @@
 <body>	
 	<h1>Liste des ouvrages</h1>
 	<form method="GET" action="/liste">
-		<input type="text" name="titre" value="<%= query.titre || '' %>" placeholder="Rechercher un ouvrage...">
+		<input type="text" name="titre" value="<%= titre || '' %>" placeholder="Rechercher un ouvrage...">
 		<button type="submit">Rechercher</button>
+		<details <% if ( auteur || anneeMin !== null || anneeMax !== null) { %> open <% } %>>
+			<summary>Recherche avancée</summary>
+			<div>
+				<label for="auteur">Auteur:</label>
+				<input type="text" id="auteur" name="auteur" value="<%= auteur || '' %>">
+			</div>
+			<div>
+				<label for="anneeMin">Année de publication:</label>
+				<input type="number" id="anneeMin" placeholder="De" name="anneeMin" value="<%= anneeMin ?? '' %>">
+				<input type="number" id="anneeMax" placeholder="À" name="anneeMax" value="<%= anneeMax ?? '' %>">
+			</div>
+		</details>
 	</form>
 
 	<% if (ouvrages.length === 0) { %>
