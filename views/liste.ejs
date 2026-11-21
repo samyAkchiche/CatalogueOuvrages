@@ -24,13 +24,15 @@
 		</details>
 	</form>
 
+	<a href="/ajouter">Ajouter un ouvrage</a>
+
 	<% if (ouvrages.length === 0) { %>
 		<p>Aucun ouvrage trouvé.</p>
 	<% } %>
 
 	<ul>
 		<% ouvrages.forEach(ouvrage => { %>
-			<li><%= ouvrage.titre %> - <%= ouvrage.auteur %></li>
+			<li><a href="/fiche/<%= ouvrage.id %>"><%= ouvrage.titre %> - <%= ouvrage.auteur %></a></li>
 		<% }) %>
 	</ul>
 

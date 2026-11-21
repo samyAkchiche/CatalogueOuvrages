@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Fiche de l'ouvrage</title>
+	</head>
+	<body>
+		<h1><%= ouvrages.titre %></h1>
+		<h4><%= ouvrages.auteur %></h4>
+		<h4><%= ouvrages.annee %></h4>
+		<h4><%= ouvrages.disponible ? "Disponible" : "Non disponible" %></h4>
+		<a href="/liste">Retour à la liste</a>
+	</body>
+</html>

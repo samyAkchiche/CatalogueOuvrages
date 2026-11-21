@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Ajouter un ouvrage</title>
+	</head>
+	<body>
+		<form action="/ajouter" method="POST">
+			<label for="titre">Titre :</label>
+			<input type="text" name="titre" id="titre" required />
+			<label for="auteur">Auteur :</label>
+			<input type="text" name="auteur" id="auteur" required />
+			<label for="annee">Année :</label>
+			<input type="number" name="annee" id="annee" required />
+			<label for="disponible">Disponible :</label>
+			<input type="checkbox" name="disponible" id="disponible" />
+			<button type="submit">Ajouter</button>
+		</form>
+	</body>
+</html>
