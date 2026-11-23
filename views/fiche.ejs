@@ -1,15 +1,37 @@
-<!DOCTYPE html>
-<html lang="fr">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Fiche de l'ouvrage</title>
-	</head>
-	<body>
+<%- include('partials/head', { titrePage: "Fiche de l'ouvrage", page: '' }) %>
+
+<a class="back" href="/liste">
+	<span aria-hidden="true">←</span> Retour à la liste
+</a>
+
+<% const initiale = String(ouvrage.titre || '?').trim().charAt(0).toUpperCase() || '?'; %>
+
+<article class="fiche card">
+	<div class="fiche__cover" aria-hidden="true"><%= initiale %></div>
+	<div class="fiche__body">
+		<p class="eyebrow">Fiche ouvrage</p>
 		<h1><%= ouvrage.titre %></h1>
-		<h4><%= ouvrage.auteur %></h4>
-		<h4><%= ouvrage.annee %></h4>
-		<h4><%= ouvrage.disponible ? "Disponible" : "Non disponible" %></h4>
-		<a href="/liste">Retour à la liste</a>
-	</body>
-</html>
+		<p class="fiche__author"><%= ouvrage.auteur %></p>
+
+		<dl class="meta-grid">
+			<div>
+				<dt>Auteur</dt>
+				<dd><%= ouvrage.auteur %></dd>
+			</div>
+			<div>
+				<dt>Année de publication</dt>
+				<dd><%= ouvrage.annee %></dd>
+			</div>
+			<div>
+				<dt>Disponibilité</dt>
+				<dd>
+					<span class="pill <%= ouvrage.disponible ? 'pill--ok' : 'pill--no' %>">
+						<%= ouvrage.disponible ? 'Disponible' : 'Non disponible' %>
+					</span>
+				</dd>
+			</div>
+		</dl>
+	</div>
+</article>
+
+<%- include('partials/footer') %>
