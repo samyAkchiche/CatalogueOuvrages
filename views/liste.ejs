@@ -1,40 +1,76 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Catalogue d'Ouvrages</title>
-</head>
-<body>	
-	<h1>Liste des ouvrages</h1>
-	<form method="GET" action="/liste">
-		<input type="text" name="titre" value="<%= titre || '' %>" placeholder="Rechercher un ouvrage...">
-		<button type="submit">Rechercher</button>
-		<details <% if ( auteur || anneeMin !== null || anneeMax !== null) { %> open <% } %>>
-			<summary>Recherche avancée</summary>
-			<div>
-				<label for="auteur">Auteur:</label>
-				<input type="text" id="auteur" name="auteur" value="<%= auteur || '' %>">
+<%- include('partials/head', { titrePage: 'Ouvrages', page: 'liste' }) %>
+
+<section class="hero">
+	<h1>Liste d'ouvrages</h1>
+	<p class="lede">Parcourez le catalogue et affinez votre recherche par titre, auteur ou année de publication.</p>
+</section>
+
+<form class="search card" method="GET" action="/liste">
+	<div class="search__row">
+		<div class="field field--grow">
+			<label for="titre">Rechercher un ouvrage</label>
+			<input type="text" id="titre" name="titre" value="<%= titre || '' %>" placeholder="Titre, mot-clé…" />
+		</div>
+		<button class="btn btn--primary" type="submit">Rechercher</button>
+	</div>
+
+	<details class="search__advanced"<%= (auteur || anneeMin !== null || anneeMax !== null) ? ' open' : '' %>>
+		<summary>Recherche avancée</summary>
+		<div class="search__advanced-body">
+			<div class="field">
+				<label for="auteur">Auteur</label>
+				<input type="text" id="auteur" name="auteur" value="<%= auteur || '' %>" placeholder="Nom de l'auteur" />
 			</div>
-			<div>
-				<label for="anneeMin">Année de publication:</label>
-				<input type="number" id="anneeMin" placeholder="De" name="anneeMin" value="<%= anneeMin ?? '' %>">
-				<input type="number" id="anneeMax" placeholder="À" name="anneeMax" value="<%= anneeMax ?? '' %>">
+			<div class="field">
+				<label for="anneeMin">Année de publication</label>
+				<div class="range">
+					<input type="number" id="anneeMin" placeholder="De" name="anneeMin" value="<%= anneeMin ?? '' %>" />
+					<span class="range__sep">–</span>
+					<input type="number" id="anneeMax" placeholder="À" name="anneeMax" value="<%= anneeMax ?? '' %>" />
+				</div>
 			</div>
-		</details>
-	</form>
+		</div>
+	</details>
+</form>
 
-	<a href="/ajouter">Ajouter un ouvrage</a>
+<div class="results-head">
+	<p class="count"><strong><%= ouvrages.length %></strong> ouvrage<%= ouvrages.length > 1 ? 's' : '' %></p>
+	<a class="btn btn--ghost" href="/ajouter">Ajouter un ouvrage</a>
+</div>
 
-	<% if (ouvrages.length === 0) { %>
-		<p>Aucun ouvrage trouvé.</p>
-	<% } %>
-
-	<ul>
+<% if (ouvrages.length === 0) { %>
+	<div class="empty card">
+		<span class="empty__mark" aria-hidden="true">
+			<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+				<circle cx="11" cy="11" r="7" />
+				<path d="m20 20-3.9-3.9" />
+			</svg>
+		</span>
+		<h2>Aucun ouvrage trouvé.</h2>
+		<p>Essayez d'élargir vos critères de recherche ou ajoutez un nouvel ouvrage au catalogue.</p>
+		<a class="btn btn--primary" href="/liste">Réinitialiser la recherche</a>
+	</div>
+<% } else { %>
+	<ul class="grid">
 		<% ouvrages.forEach(ouvrage => { %>
-			<li><a href="/fiche/<%= ouvrage.id %>"><%= ouvrage.titre %> - <%= ouvrage.auteur %></a></li>
+			<% const initiale = String(ouvrage.titre || '?').trim().charAt(0).toUpperCase() || '?'; %>
+			<li class="book card">
+				<a class="book__link" href="/fiche/<%= ouvrage.id %>">
+					<span class="book__cover" aria-hidden="true"><%= initiale %></span>
+					<span class="book__body">
+						<span class="book__title"><%= ouvrage.titre %></span>
+						<span class="book__author"><%= ouvrage.auteur %></span>
+						<span class="book__meta">
+							<span class="chip"><%= ouvrage.annee %></span>
+							<span class="pill <%= ouvrage.disponible ? 'pill--ok' : 'pill--no' %>">
+								<%= ouvrage.disponible ? 'Disponible' : 'Indisponible' %>
+							</span>
+						</span>
+					</span>
+				</a>
+			</li>
 		<% }) %>
 	</ul>
+<% } %>
 
-</body>
-</html>
+<%- include('partials/footer') %>

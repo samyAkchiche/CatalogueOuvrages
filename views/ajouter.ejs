@@ -1,21 +1,37 @@
-<!DOCTYPE html>
-<html lang="fr">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Ajouter un ouvrage</title>
-	</head>
-	<body>
-		<form action="/ajouter" method="POST">
-			<label for="titre">Titre :</label>
-			<input type="text" name="titre" id="titre" required />
-			<label for="auteur">Auteur :</label>
-			<input type="text" name="auteur" id="auteur" required />
-			<label for="annee">Année :</label>
-			<input type="number" name="annee" id="annee" required />
-			<label for="disponible">Disponible :</label>
-			<input type="checkbox" name="disponible" id="disponible" />
-			<button type="submit">Ajouter</button>
-		</form>
-	</body>
-</html>
+<%- include('partials/head', { titrePage: 'Ajouter un ouvrage', page: 'ajouter' }) %>
+
+<section class="hero hero--tight">
+	<h1>Ajouter un ouvrage</h1>
+	<p class="lede">Renseignez les informations du livre pour l'enregistrer dans le catalogue.</p>
+</section>
+
+<form class="form card" action="/ajouter" method="POST">
+	<div class="form__grid">
+		<div class="field field--full">
+			<label for="titre">Titre</label>
+			<input type="text" name="titre" id="titre" placeholder="Ex. Les Misérables" required />
+		</div>
+		<div class="field">
+			<label for="auteur">Auteur</label>
+			<input type="text" name="auteur" id="auteur" placeholder="Ex. Victor Hugo" required />
+		</div>
+		<div class="field">
+			<label for="annee">Année de publication</label>
+			<input type="number" name="annee" id="annee" placeholder="Ex. 1862" required />
+		</div>
+	</div>
+
+	<label class="switch" for="disponible">
+		<input type="checkbox" name="disponible" id="disponible" />
+		<span>
+			<strong>Disponible</strong>
+		</span>
+	</label>
+
+	<div class="form__actions">
+		<a class="btn btn--ghost" href="/liste">Annuler</a>
+		<button class="btn btn--primary" type="submit">Ajouter au catalogue</button>
+	</div>
+</form>
+
+<%- include('partials/footer') %>
